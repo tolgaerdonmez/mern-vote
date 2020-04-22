@@ -5,15 +5,18 @@
 	"license": "MIT",
 	"dependencies": {
 		"cookie-parser": "^1.4.5",
+		"core-js": "^3.6.5",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"express-jwt": "^5.3.3",
 		"jsonwebtoken": "^8.5.1",
-		"mongoose": "^5.9.7"
+		"mongoose": "^5.9.7",
+		"regenerator-runtime": "^0.13.5"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.8.4",
 		"@babel/core": "^7.9.0",
+		"@babel/plugin-transform-async-to-generator": "^7.8.3",
 		"@babel/preset-env": "^7.9.5",
 		"babel-watch": "^7.0.0"
 	},

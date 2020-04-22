@@ -1,9 +1,15 @@
+// babel imports
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+// normal imports
 import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import config from "./config";
+
 import userRoutes from "./routes/user";
 import authRoutes from "./routes/auth";
-import config from "./config";
+import pollRoutes from "./routes/polls";
 
 const app = express();
 
@@ -31,6 +37,7 @@ app.use(cookieParser());
 // routes
 app.use("/", userRoutes);
 app.use("/", authRoutes);
+app.use("/", pollRoutes);
 
 app.use((err, req, res, next) => {
 	if (err.name === "UnauthorizedError") {

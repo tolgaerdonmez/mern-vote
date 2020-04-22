@@ -1,21 +1,7 @@
 import { Router } from "express";
-import expressJwt from "express-jwt";
 import User from "../models/user";
-import config from "../config";
-
+import { jwt, hasAuthorization } from "../middlewares/auth";
 const router = Router();
-
-const requireSignIn = expressJwt({ secret: config.jwtSecret, userProperty: "auth" });
-
-const hasAuthorization = (req, res, next) => {
-	const authorized = req.profile && req.auth && req.profile._id == req.auth._id;
-	if (!authorized) {
-		return res.status(403).json({
-			error: "User is not authorized!",
-		});
-	}
-	next();
-};
 
 router.route("/api/users").post((req, res) => {
 	const user = new User(req.body);
@@ -29,12 +15,12 @@ router.route("/api/users").post((req, res) => {
 
 router
 	.route("/api/users/:userId")
-	.get(requireSignIn, hasAuthorization, (req, res) => {
+	.get(jwt, hasAuthorization, (req, res) => {
 		req.profile.hashedPassword = undefined;
 		req.profile.salt = undefined;
 		return res.json(req.profile);
 	})
-	.delete(requireSignIn, hasAuthorization, (req, res, next) => {
+	.delete(jwt, hasAuthorization, (req, res, next) => {
 		let user = req.profile;
 		user.remove((err, deletedUser) => {
 			if (err) {

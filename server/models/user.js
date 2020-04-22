@@ -23,6 +23,7 @@ const userSchema = new Schema({
 	salt: {
 		type: String,
 	},
+	polls: [{ type: Schema.Types.ObjectId, ref: "Poll" }],
 });
 
 userSchema
