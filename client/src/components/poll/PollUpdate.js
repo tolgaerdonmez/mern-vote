@@ -21,7 +21,7 @@ class PollUpdate extends Component {
 	handleOptionChange = e => {
 		this.setState({
 			options: this.state.options.map(option => {
-				if (option._id === e.target.name) option.option = e.target.value;
+				if (option._id.toString() === e.target.name) option.option = e.target.value;
 				return option;
 			}),
 		});

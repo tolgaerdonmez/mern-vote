@@ -13,7 +13,7 @@ class PollCreate extends Component {
 	handleOptionChange = e => {
 		this.setState({
 			options: this.state.options.map(option => {
-				if (option._id === e.target.name) option.option = e.target.value;
+				if (option._id.toString() === e.target.name) option.option = e.target.value;
 				return option;
 			}),
 		});
@@ -57,7 +57,7 @@ class PollCreate extends Component {
 				</div>
 				<div className="form-group">
 					<label>Options</label>
-					{this.state.options.map(({ option, _id }, index) => (
+					{this.state.options.map(({ option, _id }) => (
 						<div
 							className="d-flex flex-direction-column justify-content-center align-items-center"
 							key={_id}>
