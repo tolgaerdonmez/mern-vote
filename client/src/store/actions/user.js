@@ -1,4 +1,4 @@
-import * as API from "../../api";
+import * as API from "../../api/user";
 
 export const login = user => dispatch => {
 	API.login(user).then(data => {

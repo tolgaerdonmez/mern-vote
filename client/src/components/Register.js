@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
-import { register } from "../api";
+import { register } from "../api/user";
 
 export default class Register extends Component {
 	state = {

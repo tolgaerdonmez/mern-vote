@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 class Navbar extends Component {
 	render() {
 		return (
-			<nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+			<nav className="navbar navbar-expand-lg navbar-dark bg-primary mx-5 mt-2">
 				<button
 					className="navbar-toggler"
 					type="button"
@@ -19,18 +19,30 @@ class Navbar extends Component {
 					<span className="navbar-toggler-icon"></span>
 				</button>
 				<div className="collapse navbar-collapse" id="navbarNav">
-					<ul className="navbar-nav">
+					<ul className="navbar-nav mr-auto">
 						<li className="nav-item">
 							<Link to="/" className="nav-link">
 								Home
 							</Link>
 						</li>
+						<li className="nav-item">
+							<Link to="/polls" className="nav-link">
+								Polls
+							</Link>
+						</li>
+					</ul>
+					<ul className="navbar-nav my-2 my-lg-0">
 						{this.props.isAuthenticated ? (
 							<>
 								<li className="nav-item">
-									<a href="#" className="btn btn-danger" onClick={this.props.logout}>
+									<Link to="/polls/admin" className="nav-link">
+										Your Polls
+									</Link>
+								</li>
+								<li className="nav-item my-2 my-lg-0">
+									<button className="btn btn-danger" onClick={this.props.logout}>
 										Logout
-									</a>
+									</button>
 								</li>
 							</>
 						) : (

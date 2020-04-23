@@ -11,9 +11,9 @@ router
 	.get((req, res) => {
 		Poll.find((err, polls) => {
 			if (err) {
-				res.status(400).json({ error: err });
+				return res.status(400).json({ error: err });
 			}
-			res.status(200).json({ polls });
+			return res.status(200).json({ polls });
 		});
 	})
 	.post(jwt, hasAuthorization, async (req, res) => {
@@ -49,12 +49,14 @@ router
 	})
 	.post(async (req, res) => {
 		try {
-			const { voteToIndex } = req.body;
+			const { optionId } = req.body;
 			const options = req.poll.options;
-			options[voteToIndex].votes++;
+			const option = options.find(x => x._id == optionId);
+			option.votes++;
 			await req.poll.save();
+			console.log(req.poll);
 			res.status(201).json({
-				message: `Voted to ${options[voteToIndex].option}, now has ${options[voteToIndex].votes}`,
+				message: `Voted to ${option.option}, now has ${option.votes}`,
 			});
 		} catch (error) {
 			console.log(error);
