@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { deletePoll } from "../../store/actions/polls";
 
 const calcTotalVotes = options => {
-	return options.map(x => x.votes).reduce((acc, cur) => (acc ? cur + acc : cur));
+	return options.map(x => (x.votes ? x.votes : 0)).reduce((acc, cur) => (acc ? cur + acc : cur));
 };
 
 function PollList({ polls, adminMode, deletePoll }) {

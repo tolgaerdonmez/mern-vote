@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { updatePoll } from "../../store/actions/polls";
+import { error as errorMsg } from "../../store/actions/alerts";
 import { getPollbyId } from "../../api/polls";
 
 class PollUpdate extends Component {
@@ -38,13 +39,17 @@ class PollUpdate extends Component {
 	handleSubmit = e => {
 		e.preventDefault();
 		let { question, options, pollId } = this.state;
-		options = options.map(option => {
-			if (option.votes) return option;
-			return { option: option.option };
-		});
-		const poll = { question, options };
-		this.props.updatePoll(pollId, poll);
-		this.props.history.push("/polls/admin");
+		if (options.length) {
+			options = options.map(option => {
+				if (option.votes) return option;
+				return { option: option.option };
+			});
+			const poll = { question, options };
+			this.props.updatePoll(pollId, poll);
+			this.props.history.push("/polls/admin");
+		} else {
+			this.props.errorMsg("You cannot leave options empty!");
+		}
 	};
 
 	render() {
@@ -62,6 +67,7 @@ class PollUpdate extends Component {
 						name="question"
 						onChange={this.handleChange}
 						value={this.state.question}
+						required
 					/>
 				</div>
 				<div className="form-group">
@@ -96,4 +102,4 @@ class PollUpdate extends Component {
 	}
 }
 
-export default connect(null, { updatePoll })(PollUpdate);
+export default connect(null, { updatePoll, errorMsg })(PollUpdate);

@@ -54,7 +54,6 @@ router
 			const option = options.find(x => x._id == optionId);
 			option.votes++;
 			await req.poll.save();
-			console.log(req.poll);
 			res.status(201).json({
 				message: `Voted to ${option.option}, now has ${option.votes}`,
 			});

@@ -2,7 +2,7 @@ const initialState = {
 	id: null,
 	token: null,
 	isAuthenticated: false,
-	polls: [],
+	polls: null,
 };
 
 export default (state = initialState, { type, payload }) => {

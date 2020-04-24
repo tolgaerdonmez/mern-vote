@@ -30,7 +30,7 @@ export default class Register extends Component {
 
 	render() {
 		if (this.props.isAuthenticated) return <Redirect to="/" />;
-		if (this.state.redirectToSignIn) return <Redirect to="/signin" />;
+		if (this.state.redirectToSignIn) return <Redirect to="/login" />;
 
 		return (
 			<div>

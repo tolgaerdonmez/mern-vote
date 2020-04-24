@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+import { Navbar as BNavbar, Nav } from "react-bootstrap";
 
 import { logout } from "../store/actions/user";
 import { connect } from "react-redux";
@@ -7,61 +8,55 @@ import { connect } from "react-redux";
 class Navbar extends Component {
 	render() {
 		return (
-			<nav className="navbar navbar-expand-lg navbar-dark bg-primary mx-5 mt-2">
-				<button
-					className="navbar-toggler"
-					type="button"
-					data-toggle="collapse"
-					data-target="#navbarNav"
-					aria-controls="navbarNav"
-					aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span className="navbar-toggler-icon"></span>
-				</button>
-				<div className="collapse navbar-collapse" id="navbarNav">
-					<ul className="navbar-nav mr-auto">
-						<li className="nav-item">
-							<Link to="/" className="nav-link">
-								Home
-							</Link>
-						</li>
-						<li className="nav-item">
-							<Link to="/polls" className="nav-link">
-								Polls
-							</Link>
-						</li>
-					</ul>
-					<ul className="navbar-nav my-2 my-lg-0">
-						{this.props.isAuthenticated ? (
-							<>
-								<li className="nav-item">
-									<Link to="/polls/admin" className="nav-link">
-										Your Polls
-									</Link>
-								</li>
-								<li className="nav-item my-2 my-lg-0">
-									<button className="btn btn-danger" onClick={this.props.logout}>
-										Logout
-									</button>
-								</li>
-							</>
-						) : (
-							<>
-								<li className="nav-item">
-									<Link to="/register" className="nav-link">
-										Register
-									</Link>
-								</li>
-								<li className="nav-item">
-									<Link to="/login" className="nav-link">
-										Login
-									</Link>
-								</li>
-							</>
-						)}
-					</ul>
-				</div>
-			</nav>
+			<div className="mx-5 mt-2">
+				<BNavbar bg="primary" variant="dark" expand="lg">
+					<BNavbar.Brand>Voting App</BNavbar.Brand>
+					<BNavbar.Toggle aria-controls="basic-navbar-nav" />
+					<BNavbar.Collapse id="basic-navbar-nav">
+						<Nav className="mr-auto">
+							<Nav.Link>
+								<Link to="/" className="nav-link">
+									Home
+								</Link>
+							</Nav.Link>
+							<Nav.Link>
+								<Link to="/polls" className="nav-link">
+									Polls
+								</Link>
+							</Nav.Link>
+						</Nav>
+						<Nav className="ml-auto">
+							{this.props.isAuthenticated ? (
+								<>
+									<Nav.Link>
+										<Link to="/polls/admin" className="nav-link">
+											Your Polls
+										</Link>
+									</Nav.Link>
+									<Nav.Link>
+										<button className="btn btn-danger" onClick={this.props.logout}>
+											Logout
+										</button>
+									</Nav.Link>
+								</>
+							) : (
+								<>
+									<Nav.Link className="nav-item">
+										<Link to="/register" className="nav-link">
+											Register
+										</Link>
+									</Nav.Link>
+									<Nav.Link className="nav-item">
+										<Link to="/login" className="nav-link">
+											Login
+										</Link>
+									</Nav.Link>
+								</>
+							)}
+						</Nav>
+					</BNavbar.Collapse>
+				</BNavbar>
+			</div>
 		);
 	}
 }

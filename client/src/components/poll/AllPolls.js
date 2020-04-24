@@ -11,17 +11,21 @@ function AllPolls() {
 		};
 		fetch();
 	}, []);
-	if (polls === null) {
-		return (
-			<div className="spinner-border" role="status">
-				<span className="sr-only">Loading...</span>
-			</div>
-		);
-	}
+
 	return (
 		<div>
 			<h1>Existing Polls</h1>
-			<PollList polls={polls} />
+			{polls === null ? (
+				<div className="spinner-border" role="status">
+					<span className="sr-only">Loading...</span>
+				</div>
+			) : polls.length === 0 ? (
+				<div class="alert alert-warning" role="alert">
+					There are no polls ! Log in to create the first one !
+				</div>
+			) : (
+				<PollList polls={polls} />
+			)}
 		</div>
 	);
 }

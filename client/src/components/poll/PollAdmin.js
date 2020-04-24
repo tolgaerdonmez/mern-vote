@@ -23,9 +23,13 @@ class PollAdmin extends Component {
 					</Link>
 				</div>
 
-				{!this.props.polls.length ? (
+				{this.props.polls === null ? (
 					<div className="spinner-border" role="status">
 						<span className="sr-only">Loading...</span>
+					</div>
+				) : this.props.polls.length === 0 ? (
+					<div class="alert alert-warning" role="alert">
+						You don't have any polls!
 					</div>
 				) : (
 					<PollList polls={this.props.polls} adminMode={true} />

@@ -10,7 +10,7 @@ import store from "./store";
 import { logout } from "./store/actions/user";
 
 const user = localStorage.getItem("user");
-if (user.length) {
+if (user) {
 	store.dispatch({ type: "LOGIN", payload: JSON.parse(user) });
 } else {
 	store.dispatch(logout());
