@@ -10,8 +10,7 @@ import { connect } from "react-redux";
 import AllPolls from "./components/poll/AllPolls";
 import Poll from "./components/poll/Poll";
 import PollAdmin from "./components/poll/PollAdmin";
-import PollUpdate from "./components/poll/PollUpdate";
-import PollCreate from "./components/poll/PollCreate";
+import PollForm from "./components/poll/PollForm";
 
 class Routes extends Component {
 	render() {
@@ -44,12 +43,14 @@ class Routes extends Component {
 						<Route
 							exact
 							path="/polls/admin/update/:pollId"
-							render={props => <PollUpdate isAuthenticated={isAuthenticated} {...props} />}
+							render={props => (
+								<PollForm updateMode={true} isAuthenticated={isAuthenticated} {...props} />
+							)}
 						/>
 						<Route
 							exact
 							path="/polls/admin/create"
-							render={props => <PollCreate isAuthenticated={isAuthenticated} {...props} />}
+							render={props => <PollForm isAuthenticated={isAuthenticated} {...props} />}
 						/>
 					</Switch>
 				</div>

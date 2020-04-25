@@ -20,8 +20,29 @@ const pollSchema = new Schema({
 		type: Date,
 		default: Date.now,
 	},
+	expiresAt: {
+		type: Date,
+		default: Date.now,
+	},
+	expires: {
+		type: Boolean,
+		default: false,
+	},
+	isPrivate: {
+		type: Boolean,
+		default: false,
+	},
 	question: String,
 	options: [optionSchema],
 });
+
+pollSchema.methods = {
+	vote: function (optionId) {
+		if (this.expires && this.expiresAt.getTime() < Date.now()) return false;
+		const option = this.options.find(x => x._id == optionId);
+		option.votes++;
+		return option;
+	},
+};
 
 export default mongoose.model("Poll", pollSchema);

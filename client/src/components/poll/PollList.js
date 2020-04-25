@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { deletePoll } from "../../store/actions/polls";
+import SharePollModal from "./SharePollModal";
 
 const calcTotalVotes = options => {
 	return options.map(x => (x.votes ? x.votes : 0)).reduce((acc, cur) => (acc ? cur + acc : cur));
@@ -16,6 +17,14 @@ function PollList({ polls, adminMode, deletePoll }) {
 				{polls.map(poll => (
 					<li key={poll._id} className="list-group-item d-flex justify-content-between align-items-center">
 						<span>
+							{adminMode && poll.isPrivate ? (
+								<span className="badge badge-danger mr-1">Private</span>
+							) : (
+								""
+							)}
+							{poll.expires && new Date(poll.expiresAt).getTime() < Date.now() ? (
+								<span className="badge badge-warning mr-1">Expired</span>
+							) : null}
 							{poll.question} - Created At: <i>{new Date(poll.createdAt).toLocaleDateString()}</i> - Total
 							Votes: {calcTotalVotes(poll.options)}
 						</span>
@@ -32,7 +41,10 @@ function PollList({ polls, adminMode, deletePoll }) {
 									</button>
 								</>
 							) : null}
-							<Link to={"/poll/" + poll._id} className="btn btn-outline-warning">
+							<SharePollModal
+								pollUrl={"http://" + window.location.href.split("/")[2] + "/poll/" + poll._id}
+							/>
+							<Link to={"/poll/" + poll._id} className="btn btn-outline-warning ml-2">
 								See Poll {"->"}
 							</Link>
 						</div>

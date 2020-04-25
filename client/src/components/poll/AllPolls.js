@@ -14,7 +14,7 @@ function AllPolls() {
 
 	return (
 		<div>
-			<h1>Existing Polls</h1>
+			<h1>Public Polls</h1>
 			{polls === null ? (
 				<div className="spinner-border" role="status">
 					<span className="sr-only">Loading...</span>

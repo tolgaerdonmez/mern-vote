@@ -6,9 +6,9 @@ export default function Home() {
 		<div className="d-flex flex-direction-column justify-content-center align-items-center">
 			<div className="card text-white bg-primary mb-3 mx-2" style={{ maxWidth: "20rem" }}>
 				<div className="card-body">
-					<h1 className="card-title text-center">Existing polls</h1>
+					<h1 className="card-title text-center">Public polls</h1>
 					<p className="card-text">See the polls created by other users and vote!</p>
-					<Link className="btn btn-danger" to="/polls">
+					<Link className="btn btn-info" to="/polls">
 						Check out other polls!
 					</Link>
 				</div>
@@ -16,8 +16,8 @@ export default function Home() {
 			<div className="card text-white bg-primary mb-3 mx-2" style={{ maxWidth: "20rem" }}>
 				<div className="card-body">
 					<h1 className="card-title text-center">Create a Poll!</h1>
-					<p className="card-text">See the polls created by other users and vote!</p>
-					<Link className="btn btn-danger" to="/polls/admin/create">
+					<p className="card-text">Create your own poll and share with your friends!</p>
+					<Link className="btn btn-success" to="/polls/admin/create">
 						Create Poll
 					</Link>
 				</div>

@@ -8,13 +8,14 @@ const router = Router();
 
 router
 	.route("/api/polls")
-	.get((req, res) => {
-		Poll.find((err, polls) => {
-			if (err) {
-				return res.status(400).json({ error: err });
-			}
-			return res.status(200).json({ polls });
-		});
+	.get(async (req, res) => {
+		try {
+			const query = Poll.find({ isPrivate: false });
+			const polls = await query;
+			res.status(200).json({ polls });
+		} catch (error) {
+			res.status(400).json({ error: error.message });
+		}
 	})
 	.post(jwt, hasAuthorization, async (req, res) => {
 		try {
@@ -24,7 +25,7 @@ router
 			await user.save();
 			return res.status(201).json({ message: "New poll created!", poll });
 		} catch (error) {
-			return res.status(400).json({ error });
+			return res.status(400).json({ error: error.message });
 		}
 	});
 
@@ -34,7 +35,7 @@ router.get("/api/polls/user/:userId", async (req, res) => {
 		const { polls } = await User.findById(userId).populate("polls");
 		res.status(200).json({ polls });
 	} catch (error) {
-		res.status(400).json({ error });
+		res.status(400).json({ error: error.message });
 	}
 });
 
@@ -44,34 +45,39 @@ router
 		try {
 			res.status(200).json(req.poll);
 		} catch (error) {
-			res.status(400).json({ error });
+			res.status(400).json({ error: error.message });
 		}
 	})
 	.post(async (req, res) => {
 		try {
+			const votedList = req.cookies["voted"] === undefined ? [] : req.cookies["voted"];
+			if (votedList.find(id => id == req.poll._id)) throw new Error("Already voted");
+
 			const { optionId } = req.body;
-			const options = req.poll.options;
-			const option = options.find(x => x._id == optionId);
-			option.votes++;
+			const isVoted = req.poll.vote(optionId);
+			if (!isVoted) throw new Error("Poll expired!");
+			const option = isVoted;
+
 			await req.poll.save();
+
+			res.cookie("voted", [...votedList, req.poll._id]);
+
 			res.status(201).json({
 				message: `Voted to ${option.option}, now has ${option.votes}`,
 			});
 		} catch (error) {
-			console.log(error);
-			res.status(400).json({ error: "Can't vote!" });
+			res.status(400).json({ error: error.message });
 		}
 	})
 	.put(jwt, hasAuthorization, async (req, res) => {
 		try {
-			const { question, options } = req.body;
-			req.poll.question = question;
-			req.poll.options = options;
+			Object.keys(req.body.poll).forEach(key => {
+				req.poll[key] = req.body.poll[key];
+			});
 			await req.poll.save();
 			res.status(200).json({ message: "Poll updated!", poll: req.poll });
 		} catch (error) {
-			console.log(error);
-			res.status(400).json({ error: "Can't update poll!" });
+			res.status(400).json({ error: error.message });
 		}
 	})
 	.delete(jwt, hasAuthorization, async (req, res) => {

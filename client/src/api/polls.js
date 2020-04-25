@@ -64,7 +64,7 @@ export const updatePoll = (jwt, pollId, userId, poll) => {
 			"Content-Type": "application/json",
 			Authorization: "Bearer " + jwt,
 		},
-		body: JSON.stringify({ user: userId, ...poll }),
+		body: JSON.stringify({ user: userId, poll }),
 	})
 		.then(response => {
 			return response.json();

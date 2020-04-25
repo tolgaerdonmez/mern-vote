@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { getPollbyId, voteOnPoll } from "../../api/polls";
+import SharePollModal from "./SharePollModal";
 import { Pie } from "react-roughviz";
 
 function Poll() {
 	const { pollId } = useParams();
 	const [poll, setPoll] = useState(null);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const fetch = async () => {
@@ -16,10 +19,17 @@ function Poll() {
 	}, [pollId]);
 
 	const vote = async optionId => {
-		await voteOnPoll(poll._id, optionId);
-		const _poll = { ...poll };
-		_poll.options.find(x => x._id === optionId).votes++;
-		setPoll(_poll);
+		try {
+			const resp = await voteOnPoll(poll._id, optionId);
+			if (resp.error) {
+				throw new Error(resp.error);
+			}
+			const _poll = { ...poll };
+			_poll.options.find(x => x._id === optionId).votes++;
+			setPoll(_poll);
+		} catch (error) {
+			dispatch({ type: "GET_ERRORS", payload: { message: error.message } });
+		}
 	};
 
 	if (poll === null) {
@@ -33,7 +43,9 @@ function Poll() {
 	return (
 		<div className="row d-flex">
 			<div className="col">
-				<h1>{poll.question}</h1>
+				<h1>
+					{poll.question} {poll.expires && new Date(poll.expiresAt).getTime() < Date.now() ? "Expired" : ""}
+				</h1>
 				<ul className="list-group">
 					{poll.options.map(({ option, _id, votes }) => (
 						<li key={_id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -46,8 +58,14 @@ function Poll() {
 				</ul>
 				<br />
 				<p>
-					Created At: <small>{poll.createdAt}</small>
+					Created At: <small>{new Date(poll.createdAt).toLocaleString()}</small>
 				</p>
+				{poll.expires ? (
+					<p>
+						Expires At: <small>{new Date(poll.expiresAt).toLocaleString()}</small>
+					</p>
+				) : null}
+				<SharePollModal pollUrl={window.location.href} />
 			</div>
 			<div className="col d-flex justify-content-center align-items-center">
 				<Pie
