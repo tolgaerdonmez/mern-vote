@@ -4,6 +4,7 @@
 	"main": "index.js",
 	"license": "MIT",
 	"dependencies": {
+		"@babel/runtime": "^7.9.2",
 		"cookie-parser": "^1.4.5",
 		"core-js": "^3.6.5",
 		"cors": "^2.8.5",
@@ -22,6 +23,8 @@
 		"babel-watch": "^7.0.0"
 	},
 	"scripts": {
-		"start": "babel-watch index.js"
+		"start:dev": "babel-watch server/index.js",
+		"start:prod": "node dist/index.js",
+		"build": "babel server --out-dir dist"
 	}
 }

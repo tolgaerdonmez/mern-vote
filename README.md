@@ -1,18 +1,15 @@
 # mern-vote
 MERN Stack Voting App
 
-install
+dev
 ```
-cd ./server
-yarn install or npm install
+yarn start:dev
 cd ./client
-yarn install or npm install
+yarn start
 ```
 
-run
+prod
 ```
-cd ./server
-yarn start or npm start
-cd ./client
-yarn start or npm start
+yarn build
+yarn start:prod
 ```
