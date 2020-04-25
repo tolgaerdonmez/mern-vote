@@ -56,6 +56,6 @@ app.use((err, req, res, next) => {
 	}
 });
 
-app.listen(config.port, () => {
+app.listen(config.port, config.host, () => {
 	console.log(`🚀 at port ${config.port}`);
 });
