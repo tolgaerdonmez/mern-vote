@@ -4,6 +4,7 @@ import "regenerator-runtime/runtime";
 // normal imports
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import config from "./config";
 
@@ -30,6 +31,8 @@ mongoose.connection.on("error", err => {
 });
 
 // middleware functions
+app.use(cors());
+app.use(express.static(__dirname + "/../client/build"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -38,6 +41,14 @@ app.use(cookieParser());
 app.use("/", userRoutes);
 app.use("/", authRoutes);
 app.use("/", pollRoutes);
+
+app.get("/*", (req, res) => {
+	const options = {
+		root: `${__dirname}/../client/build/`,
+		dotfiles: "deny",
+	};
+	res.sendFile("index.html", options);
+});
 
 app.use((err, req, res, next) => {
 	if (err.name === "UnauthorizedError") {
