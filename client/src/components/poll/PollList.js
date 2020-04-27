@@ -9,6 +9,16 @@ const calcTotalVotes = options => {
 	return options.map(x => (x.votes ? x.votes : 0)).reduce((acc, cur) => (acc ? cur + acc : cur));
 };
 
+function Badges({ badges }) {
+	return (
+		<>
+			{badges.map(badge =>
+				badge !== null ? <span className={`badge badge-${badge.type} mr-1`}>{badge.title}</span> : null
+			)}
+		</>
+	);
+}
+
 function PollList({ polls, adminMode, deletePoll }) {
 	const history = useHistory();
 	return (
@@ -17,14 +27,14 @@ function PollList({ polls, adminMode, deletePoll }) {
 				{polls.map(poll => (
 					<li key={poll._id} className="list-group-item d-flex justify-content-between align-items-center">
 						<span>
-							{adminMode && poll.isPrivate ? (
-								<span className="badge badge-danger mr-1">Private</span>
-							) : (
-								""
-							)}
-							{poll.expires && new Date(poll.expiresAt).getTime() < Date.now() ? (
-								<span className="badge badge-warning mr-1">Expired</span>
-							) : null}
+							<Badges
+								badges={[
+									adminMode && poll.isPrivate ? { type: "danger", title: "Private" } : null,
+									poll.expires && new Date(poll.expiresAt).getTime() < Date.now()
+										? { type: "warning", title: "Expired" }
+										: null,
+								]}
+							/>
 							{poll.question} - Created At: <i>{new Date(poll.createdAt).toLocaleDateString()}</i> - Total
 							Votes: {calcTotalVotes(poll.options)}
 						</span>
@@ -33,10 +43,10 @@ function PollList({ polls, adminMode, deletePoll }) {
 								<>
 									<button
 										onClick={() => history.push("/polls/admin/update/" + poll._id)}
-										className="btn btn-info mx-2">
+										className="btn btn-info mx-2  my-2">
 										Edit Poll
 									</button>
-									<button onClick={() => deletePoll(poll._id)} className="btn btn-danger mx-2">
+									<button onClick={() => deletePoll(poll._id)} className="btn btn-danger mx-2  my-2">
 										Delete Poll
 									</button>
 								</>
@@ -44,7 +54,7 @@ function PollList({ polls, adminMode, deletePoll }) {
 							<SharePollModal
 								pollUrl={"http://" + window.location.href.split("/")[2] + "/poll/" + poll._id}
 							/>
-							<Link to={"/poll/" + poll._id} className="btn btn-outline-warning ml-2">
+							<Link to={"/poll/" + poll._id} className="btn btn-outline-warning ml-2 my-2">
 								See Poll {"->"}
 							</Link>
 						</div>

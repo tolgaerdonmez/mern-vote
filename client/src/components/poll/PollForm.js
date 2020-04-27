@@ -53,6 +53,7 @@ class PollForm extends Component {
 			let { question, options, expires, expiresAt, isPrivate } = this.state;
 			if (!options.length) throw new Error("You cannot leave options empty!");
 			options = options.map(option => {
+				if (option.votes) return option; // for not reseting the votes whilst updating the poll
 				return { option: option.option };
 			});
 			const poll = { question, options, expires, expiresAt, isPrivate };

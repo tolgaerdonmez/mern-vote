@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-function SharePollModal({ pollUrl }) {
+function SharePollModal({ pollUrl, buttonProps, buttonTitle }) {
 	const [show, setShow] = useState(false);
 	const [ref, setRef] = useState(null);
 	const [message, setMessage] = useState(null);
@@ -10,8 +10,8 @@ function SharePollModal({ pollUrl }) {
 
 	return (
 		<>
-			<Button variant="primary" onClick={handleShow}>
-				Share
+			<Button onClick={handleShow} {...buttonProps}>
+				{buttonTitle ? buttonTitle : "Share"}
 			</Button>
 
 			<Modal show={show} onHide={handleClose}>

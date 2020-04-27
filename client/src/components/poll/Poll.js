@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { getPollbyId, voteOnPoll } from "../../api/polls";
 import SharePollModal from "./SharePollModal";
 import { Pie } from "react-roughviz";
+import COLORS, { getRandomColorList } from "../../utils/colors";
 
 function Poll() {
 	const { pollId } = useParams();
@@ -43,9 +44,17 @@ function Poll() {
 	return (
 		<div className="row d-flex">
 			<div className="col">
-				<h1>
-					{poll.question} {poll.expires && new Date(poll.expiresAt).getTime() < Date.now() ? "Expired" : ""}
-				</h1>
+				<div className="row d-flex flex-direction-column justify-content-between">
+					<h1>
+						{poll.question}{" "}
+						{poll.expires && new Date(poll.expiresAt).getTime() < Date.now() ? "Expired" : ""}
+					</h1>
+					<SharePollModal
+						pollUrl={window.location.href}
+						buttonTitle="Share Poll"
+						buttonProps={{ className: "mb-2 mx-3", variant: "warning" }}
+					/>
+				</div>
 				<ul className="list-group">
 					{poll.options.map(({ option, _id, votes }) => (
 						<li key={_id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -65,16 +74,24 @@ function Poll() {
 						Expires At: <small>{new Date(poll.expiresAt).toLocaleString()}</small>
 					</p>
 				) : null}
-				<SharePollModal pollUrl={window.location.href} />
 			</div>
-			<div className="col d-flex justify-content-center align-items-center">
+			<div className="col d-flex justify-content-center">
 				<Pie
 					data={{
 						labels: poll.options.map(x => x.option),
 						values: poll.options.map(x => (x.votes === 0 ? 0.1 : x.votes)),
 					}}
+					colors={[
+						...COLORS,
+						...[
+							poll.options.length > COLORS.length
+								? getRandomColorList(poll.options.length - COLORS.length)
+								: [],
+						].flat(Infinity),
+					]}
 					roughness={3}
 					strokeWidth={2}
+					width={poll.options.length > 10 ? 1000 : 500}
 				/>
 			</div>
 		</div>
