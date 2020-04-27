@@ -73,7 +73,6 @@ function Poll() {
 						labels: poll.options.map(x => x.option),
 						values: poll.options.map(x => (x.votes === 0 ? 0.1 : x.votes)),
 					}}
-					colors={["red", "orange", "blue", "skyblue"]}
 					roughness={3}
 					strokeWidth={2}
 				/>
